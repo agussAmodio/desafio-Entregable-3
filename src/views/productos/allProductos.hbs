@@ -1,0 +1,21 @@
+<div class="row row-cols-1 row-cols-md-3 g-1">
+
+  {{#each productos}}
+    <div class="col">
+      <div class="card h-100">
+        <img src="{{foto}}" class="card-img-top" alt="{{nombre}}" />
+        <div class="card-body">
+          <h4 class="card-title">{{nombre}}</h4>
+          <p class="card-text">${{precio}}</p>
+          <p class="card-text">Id: {{_id}}</p>
+          <p class="card-text">Descripcion: {{descripcion}}</p>
+          <form action="/products-cart/{{_id}}" method="POST">
+            <button type="submit" class="btn btn-danger btn-sm">Agregar al
+              carrito</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+
+</div>
