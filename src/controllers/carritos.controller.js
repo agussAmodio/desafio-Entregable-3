@@ -26,14 +26,14 @@ carritosCtrl.getProductsCarrito = async (req, res) => {
 carritosCtrl.renderCarritos = async (req, res) => {
   const carritos = await Carrito.find().lean();
 
-  const client = require("twilio")(process.envTWILIO_ID, process.env.TWILIO_SK);
+  /* const client = require("twilio")(process.envTWILIO_ID, process.env.TWILIO_SK);
   client.messages
     .create({
       from: "whatsapp:+14155238886",
       body: `${carritos}`,
       to: `whatsapp: ${process.env.TWILIO_WSPP}`,
     })
-    .then((message) => console.log(message.sid));
+    .then((message) => console.log(message.sid));*/
   res.render("carritos/allCarritos", { carritos });
 };
 
