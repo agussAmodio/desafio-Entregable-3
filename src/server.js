@@ -5,10 +5,14 @@ const passport = require("passport");
 const flash = require("connect-flash");
 const session = require("express-session");
 const methodOverride = require("method-override");
+const socketio = require("socket.io");
 
 // INICIALIZACIONES
 const app = express();
+const PORT = process.env.PORT;
 require("./config/passport");
+require("dotenv").config();
+require("./database");
 
 // CONFIGURACIONES
 app.set("port", process.env.PORT || 8080);
@@ -53,8 +57,13 @@ app.use(require("./routes/index.routes"));
 app.use(require("./routes/productos.routes"));
 app.use(require("./routes/users.routes"));
 app.use(require("./routes/carritos.routes"));
+app.use(require("./routes/chat.routes"));
 
 // ARCHIVOS ESTATICOS
 app.use(express.static(path.join(__dirname, "public")));
 
-module.exports = app;
+app.listen(PORT || 8080, () => {
+  console.log(`server corriendo en el puerto ${app.get("port")} `);
+});
+
+//module.exports = app;

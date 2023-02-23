@@ -1,17 +1,13 @@
-const phoneInputField = document.querySelector("#phone");
-const phoneInput = window.intlTelInput(phoneInputField, {
-  preferredCountries: ["us", "ar"],
-  utilsScript:
-    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-});
+const client = require("twilio")(process.env.TWILIO_ID, process.env.TWILIO_SK);
 
-const info = document.querySelector(".alert-info");
+const botonFinalizar = document.getElementById("botonFinalizar");
+botonFinalizar.addEventListener("click", whatsapp);
 
-function process(event) {
-  event.preventDefault();
-
-  const phoneNumber = phoneInput.getNumber();
-
-  info.style.display = "";
-  info.innerHTML = `Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
+function whatsapp() {
+  client.messages.create({
+    from: "whatsapp:+14155238886 ",
+    body: "hola mundo!",
+    to: "whatsapp:+541168473149",
+  });
+  console.log("HOLA");
 }

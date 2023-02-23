@@ -1,42 +1,89 @@
 <div class="row">
   <div class="col-md-4 mx-auto">
-    <div class="card">
-      <div class="card-header">
-        Crear Cuenta
+    <div class="card text-white" style="background-color: #6441a5">
+      <div class="card-body">
+        <form action="/users/registro" method="post">
+
+          <div class="card-header text-center mb-3">
+            Crear Cuenta
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              name="nombre"
+              placeholder="Ingrese su nombre completo"
+            />
+          </div>
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              name="direccion"
+              placeholder="Ingrese su direccion"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              name="telefono"
+              placeholder="Ingrese su telefono "
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              name="foto"
+              placeholder="Ingrese su foto de perfil"
+            />
+
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="email"
+              class="form-control"
+              name="email"
+              placeholder="Ingrese su email"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="password"
+              class="form-control"
+              name="password"
+              placeholder="Ingrese su contraseña"
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <input
+              type="password"
+              class="form-control"
+              name="confirm_password"
+              placeholder="Confirme su contraseña"
+            />
+          </div>
+
+          <div class="d-grid gap-2">
+            <button class="btn btn-dark">
+              confirmar
+            </button>
+          </div>
+        </form>
+
+        <p class="text-center mb-3">
+          Si ya estas registrado
+          <a href="http://localhost:8080/" class="text-dark">ingresa aqui</a>
+        </p>
+
       </div>
     </div>
-    <div class="card-body">
-      <form action="/users/registro" method="post">
-        <div class="form-group mb-3">
-          <input type="text" class="form-control" name="nombre" placeholder="Ingrese su nombre" />
-        </div>
-        <div class="form-group mb-3">
-          <input type="text" class="form-control" name="direccion" placeholder="Ingrese su direccion" />
-        </div>
-        <div class="form-group mb-3">
-          <input type="number" class="form-control" name="edad" placeholder="Ingrese su edad" />
-        </div>
-
-<div class="form-group mb-3">
-          <input type="text" class="form-control" name="telefono" placeholder="Ingrese su telefono " />
-        </div>
-
-        <div class="form-group mb-3">
-          <input type="text" class="form-control" name="foto" placeholder="Ingrese su foto de perfil" />
-        </div>
-
-    </div>
-    <div class="form-group mb-3">
-      <input type="email" class="form-control" name="email" placeholder="Ingrese su email" />
-    </div>
-
-    <div class="form-group mb-3">
-      <input type="password" class="form-control" name="password" placeholder="Ingrese su contraseña" />
-    </div>
-    <button class="btn btn-primary btn-block">
-      confirmar
-    </button>
-    </form>
   </div>
-</div>
 </div>

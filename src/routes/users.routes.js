@@ -9,14 +9,15 @@ const {
   logout,
 } = require("../controllers/users.controller");
 
+// REGISTRO
 router.get("/users/registro", renderRegistroForm);
-
 router.post("/users/registro", registro);
 
-router.get("/users/login", renderLoginForm);
-
+// LOGIN
+router.get("/", renderLoginForm);
 router.post("/users/login", login);
 
+// LOGOUT
 router.get("/users/logout", logout);
 
 module.exports = router;

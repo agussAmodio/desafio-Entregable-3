@@ -37,45 +37,6 @@ carritosCtrl.renderCarritos = async (req, res) => {
   res.render("carritos/allCarritos", { carritos });
 };
 
-carritosCtrl.addProductCarrito = async (req, res) => {
-  const { nombre } = req.body;
-
-  const productoEncontrado = await producto.findOne({ nombre });
-
-  const noEstaVacio = nombre !== "";
-
-  const estaEnElCarrito = await Carrito.findOne({ nombre });
-
-  if (!productoEncontrado) {
-    res.status(400).json({
-      mensaje: "Este producto no se encuentra en nuestra base de datos",
-    });
-  } else if (noEstaVacio && !estaEnElCarrito) {
-    const newProductInCart = new Carrito({
-      nombre,
-      _id: productoEncontrado._id,
-      stock: productoEncontrado.stock,
-      foto: productoEncontrado.foto,
-      precio: productoEncontrado.precio,
-    });
-
-    await producto
-      .findByIdAndUpdate(productoEncontrado)
-      .then((product) => {
-        newProductInCart.save();
-        res.json({
-          mensaje: `El producto fue agregado al carrito`,
-          product,
-        });
-      })
-      .catch((error) => console.error(error));
-  } else if (estaEnElCarrito) {
-    res.status(400).json({
-      mensaje: "El producto ya esta en el carrito",
-    });
-  }
-};
-
 carritosCtrl.deleteProductCarrito = async (req, res) => {
   const productoId = req.params.id;
 

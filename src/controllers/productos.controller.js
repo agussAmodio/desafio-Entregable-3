@@ -6,19 +6,18 @@ productosCtrl.renderProductoForm = (req, res) => {
 };
 
 productosCtrl.createNewProducto = async (req, res) => {
-  const { nombre, descripcion, id, codigo, foto, precio, stock } = req.body;
+  const { nombre, categoria, descripcion, foto, precio, stock } = req.body;
 
   const nuevoProducto = new Producto({
     nombre: nombre,
     descripcion: descripcion,
-    id: id,
-    codigo: codigo,
     foto: foto,
     precio: precio,
     stock: stock,
+    categoria: categoria,
   });
   await nuevoProducto.save();
-  res.redirect("/productos");
+  res.redirect("/productos/add");
 };
 
 productosCtrl.renderProductos = async (req, res) => {
@@ -29,6 +28,24 @@ productosCtrl.renderProductos = async (req, res) => {
 productosCtrl.deleteProducto = async (req, res) => {
   await Producto.findByIdAndDelete(req.params.id);
   res.redirect("/productos");
+};
+
+productosCtrl.productosCategoria = async (req, res) => {
+  const categoriaBuscada = req.params.categoria;
+  const productoPorCategoria = await Producto.find({
+    categoria: categoriaBuscada,
+  }).lean();
+  res.render("productos/productosCategorias", { productoPorCategoria });
+};
+
+productosCtrl.BuscarProductoPorId = async (req, res) => {
+  try {
+    const idDelProductoABuscar = req.params.id;
+    const productoEncontrado = await Producto.findById(idDelProductoABuscar);
+    res.render("productos/productoEncontrado", { productoEncontrado });
+  } catch (error) {
+    res.status(404).render("productos/errorProductoNoEncontrado");
+  }
 };
 
 module.exports = productosCtrl;

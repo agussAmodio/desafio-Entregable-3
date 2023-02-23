@@ -1,25 +1,5 @@
-<div class="btn-group p-2 g-col-6">
-  <a href="/productos" class="btn btn-outline-light">Todos los productos</a>
-  <a href="/productos/categoria/mouse" class="btn btn-outline-light">Mouse</a>
-  <a
-    href="/productos/categoria/teclado"
-    class="btn btn-outline-light"
-  >Teclado</a>
-  <a href="/productos/categoria/mando" class="btn btn-outline-light">Mando</a>
-  <a href="/productos/categoria/camara" class="btn btn-outline-light">Camara</a>
-  <a
-    href="/productos/categoria/auriculares"
-    class="btn btn-outline-light"
-  >Auriculares</a>
-  <a
-    href="/productos/categoria/microfono"
-    class="btn btn-outline-light"
-  >Microfono</a>
-</div>
-
 <div class="row row-cols-1 row-cols-md-3 g-2">
-
-  {{#each productos}}
+  {{#each productoEncontrado}}
     <div class="col">
       <div class="card h-100 text-white" style="background-color: #6441a5">
         <h6 class="card-title mx-auto">{{nombre}}</h6>

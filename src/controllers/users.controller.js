@@ -1,5 +1,4 @@
 const usersCtrl = {};
-
 const nodemailer = require("nodemailer");
 
 const passport = require("passport");
@@ -12,28 +11,45 @@ usersCtrl.renderRegistroForm = (req, res) => {
 };
 
 usersCtrl.registro = async (req, res) => {
-  const { nombre, direccion, edad, telefono, email, password, foto } = req.body;
+  const {
+    nombre,
+    direccion,
+    telefono,
+    email,
+    password,
+    foto,
+    confirm_password,
+  } = req.body;
 
-  const emailUser = await User.findOne({ email: email });
-  if (emailUser) {
+  if (password != confirm_password) {
+    req.flash("error_msg", "las contraseñas no coinciden.");
+    return res.redirect("/users/registro");
+  }
+
+  const emailsUser = await User.findOne({ email: email });
+
+  if (emailsUser) {
     req.flash("error_msg", "El email ya esta en uso!");
-    res.redirect("/users/registro");
-  } else {
-    const newUser = new User({
-      nombre,
-      direccion,
-      edad,
-      telefono,
-      email,
-      password,
-      foto,
-    });
-    const passwordSinHash = await newUser.password;
-    newUser.password = await newUser.encryptPassword(password);
-    await newUser.save();
+    return res.redirect("/users/registro");
+  }
 
-    //Envio de email
-    const transporter = nodemailer.createTransport({
+  const newUser = new User({
+    nombre,
+    direccion,
+    telefono,
+    email,
+    password,
+    foto,
+  });
+
+  const passwordSinHash = await newUser.password;
+  newUser.password = await newUser.encryptPassword(password);
+  await newUser.save();
+
+  // ENVIO DE EMAIL
+
+  //Envio de email
+  /*const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
       auth: {
@@ -50,7 +66,6 @@ usersCtrl.registro = async (req, res) => {
       text: `DATOS DE REGISTRO:
       Nombre: ${newUser.nombre} , 
       Direccion: ${newUser.direccion} , 
-      Edad: ${newUser.edad} , 
       Telefono: ${newUser.telefono} ,
       Foto: ${newUser.foto} , 
       Email: ${newUser.email}, 
@@ -61,14 +76,12 @@ usersCtrl.registro = async (req, res) => {
       if (error) {
         res.status(500).send(error.message);
       } else {
-        console.log("Email enviado");
         res.status(200).jsonp(req.body);
       }
-    });
+    });*/
 
-    req.flash("success_msg", "Usuario registrado!");
-    res.redirect("/users/login");
-  }
+  req.flash("success_msg", "Usuario registrado!");
+  res.redirect("/");
 };
 
 usersCtrl.renderLoginForm = (req, res) => {
@@ -76,8 +89,8 @@ usersCtrl.renderLoginForm = (req, res) => {
 };
 
 usersCtrl.login = passport.authenticate("local", {
-  failureRedirect: "/users/login",
-  successRedirect: "/",
+  failureRedirect: "/",
+  successRedirect: "/productos",
   failureFlash: true,
 });
 
@@ -86,8 +99,8 @@ usersCtrl.logout = (req, res) => {
     if (err) {
       return next(err);
     }
-    req.flash("success_msg", "Session cerrada");
-    res.redirect("/users/login");
+    req.flash("success_msg", "Sesion cerrada correctamente ");
+    res.redirect("/");
   });
 };
 

@@ -6,15 +6,23 @@ const {
   createNewProducto,
   renderProductos,
   deleteProducto,
+  productosCategoria,
+  BuscarProductoPorId,
 } = require("../controllers/productos.controller");
+
+// AGREGAR PRODUCTOS A LA BASE DE DATOS
 
 router.get("/productos/add", renderProductoForm);
 router.post("/productos/nuevoProducto", createNewProducto);
 
-// GET ALL
+// LISTAR TODOS LOS PRODUCTOS
 router.get("/productos", renderProductos);
 
-// DELETE
+// BORRAR PRODUCTO POR SU ID
 router.delete("/productos/delete/:id", deleteProducto);
+
+// PRODUCTOS POR CATEGORIA O POR ID
+router.get("/productos/:id", BuscarProductoPorId);
+router.get("/productos/categoria/:categoria", productosCategoria);
 
 module.exports = router;

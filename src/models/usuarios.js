@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt-nodejs");
 const registroSchema = new Schema({
   nombre: { type: String, required: true },
   direccion: { type: String, required: true },
-  edad: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   telefono: { type: String, required: true },
   password: { type: String, required: true },
