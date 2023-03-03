@@ -1,8 +1,11 @@
-const { Router } = require("express");
+import { Router } from "express";
 const router = Router();
+import helpers from "../helpers/auth.js";
 
-const { renderChat } = require("../controllers/chat.controller");
+import chatCtrl from "../controllers/chat.controller.js";
 
-router.get("/chat", renderChat);
+router.get("/chat", helpers.isAuthenticated, chatCtrl.renderChat);
 
-module.exports = router;
+router.get("/chat/:email", helpers.isAuthenticated, chatCtrl.mensajesPorEmial);
+
+export default router;

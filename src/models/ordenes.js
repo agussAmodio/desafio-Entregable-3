@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const carritoSchema = new Schema(
+const ordenesSchema = new Schema(
   {
     email: { type: String, required: true },
     productos: [
@@ -15,7 +15,7 @@ const carritoSchema = new Schema(
       },
     ],
     direccion: { type: String, required: true },
-    //inCart: { type: Boolean, required: false },
+    estado: { type: String, default: "generada" },
   },
 
   {
@@ -23,4 +23,4 @@ const carritoSchema = new Schema(
   }
 );
 
-export default model("carritos", carritoSchema);
+export default model("ordenes", ordenesSchema);

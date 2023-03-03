@@ -1,11 +1,12 @@
-<nav class="navbar navbar-dark" >
+<nav class="navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/productos">Ecommerce</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
             aria-controls="offcanvasNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="offcanvas offcanvas-end text-white" style="background-color: #6441a5" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" >
+        <div class="offcanvas offcanvas-end text-white" style="background-color: #6441a5" tabindex="-1"
+            id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Opciones</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -23,17 +24,20 @@
                         <a class="nav-link" href="/chat">Chat</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/ordenes">Ordenes</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/users/logout">Logout</a>
                     </li>
-                {{else}}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/users/registro">Registro</a>
-                    </li>
-                {{/if}}
+                        {{else}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/registro">Registro</a>
+                        </li>
+                        {{/if}}
+                    </div>
             </div>
         </div>
-    </div>
 </nav>

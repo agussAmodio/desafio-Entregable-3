@@ -1,5 +1,6 @@
+import Users from "../models/usuarios.js";
+
 const indexCtrl = {};
-const Users = require("../models/usuarios");
 
 indexCtrl.renderCarrito = (req, res) => {
   res.render("carrito");
@@ -20,4 +21,4 @@ indexCtrl.renderCuenta = async (req, res) => {
   res.render("cuenta", { usuarioEncontrado });
 };
 
-module.exports = indexCtrl;
+export default indexCtrl;

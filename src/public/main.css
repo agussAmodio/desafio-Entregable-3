@@ -1,0 +1,13 @@
+#contentWrap {
+  display: none;
+}
+
+.chat {
+  height: 35rem;
+  overflow-y: scroll;
+}
+
+.bg-personalizado {
+  background-color: #6441a5;
+  color: white;
+}

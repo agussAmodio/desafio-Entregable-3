@@ -1,9 +1,8 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose";
 
 const chatSchema = new Schema(
   {
     email: { type: String, required: true },
-    foto: { type: String, required: true },
     mensaje: { type: String, required: true },
   },
   {
@@ -11,4 +10,4 @@ const chatSchema = new Schema(
   }
 );
 
-module.exports = model("chat", chatSchema);
+export default model("chat", chatSchema);

@@ -1,12 +1,14 @@
-const mongoose = require("mongoose");
-const LOGIN_MONGODB_URI = process.env.LOGIN_MONGODB_URI;
-
+import { config } from "dotenv";
+config();
+import mongoose from "mongoose";
 mongoose.set("strictQuery", false);
 
-mongoose
-  .connect(LOGIN_MONGODB_URI, {
+try {
+  const db = mongoose.connect(process.env.MONGODB_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-  })
-  .then((db) => console.log("Base de datos conectada correctamente!"))
-  .catch((err) => console.log(err));
+  });
+  console.log("Conectado con la base de datos!!");
+} catch (error) {
+  console.error(error);
+}

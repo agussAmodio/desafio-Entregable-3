@@ -1,0 +1,62 @@
+ORDENES:
+
+<div class="container">
+  <h1 class="mb-3">Órdenes de Compra</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID de Orden</th>
+        <th>Fecha de Compra</th>
+        <th>Productos</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each orders}}
+        <tr>
+          <td>{{number}}</td>
+          <td>{{date}}</td>
+          <td>{{supplier}}</td>
+          <td>
+            <ul class="list-unstyled">
+              {{#each items}}
+                <li>{{name}} ({{quantity}})</li>
+              {{/each}}
+            </ul>
+          </td>
+          <td>{{total}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+
+
+  const { id } = req.params;
+  const carrito = await Carrito.findOne();
+  const productoParaAgregar = await Producto.findById({ _id: id });
+
+  /*const productoExistente = carrito.productos.find(
+    (p) => p._id.toString() === id
+  );*/
+
+  if (productoExistente) {
+    productoExistente.cantidadProdCarrito++;
+    await carrito.save();
+    return res.send("Producto agregado al carrito.");
+  }
+
+  const nuevoProductoEnCarrito = await Carrito.findByIdAndUpdate(carrito._id, {
+    $push: {
+      productos: {
+        ...productoParaAgregar.toObject(),
+        cantidadProdCarrito: 1,
+      },
+    },
+  });

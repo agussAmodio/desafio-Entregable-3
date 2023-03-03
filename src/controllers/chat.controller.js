@@ -1,21 +1,20 @@
 const chatCtrl = {};
-const Mensaje = require("../models/chat");
-const Users = require("../models/usuarios");
+import Mensaje from "../models/chat.js";
+import Users from "../models/usuarios.js";
 
 chatCtrl.renderChat = async (req, res) => {
-  const useruarioActivo = req.user;
-  const usuarioEncontrado = await Users.find({
-    _id: useruarioActivo._id,
-  }).lean();
-
-  const nuevoMensaje = new Mensaje({
-    email: useruarioActivo.email,
-    foto: useruarioActivo.foto,
-    mensaje: "Hola esto es una prueba!",
-  });
-  await nuevoMensaje.save();
-
-  res.render("mensajes/chat", { usuarioEncontrado });
+  res.render("mensajes/chat");
 };
 
-module.exports = chatCtrl;
+chatCtrl.mensajesPorEmial = async (req, res) => {
+  const emailABuscar = req.params.email;
+  const mensajes = await Mensaje.find({ email: emailABuscar }).lean();
+
+  if (mensajes.length == 0) {
+    res.status(404).render("mensajes/errorMensaje");
+  } else {
+    res.render("mensajes/mensajesPorEmail", { mensajes });
+  }
+};
+
+export default chatCtrl;

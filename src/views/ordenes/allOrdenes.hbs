@@ -1,0 +1,46 @@
+<div class="container">
+  <h1 class="mb-3">Órdenes de Compra</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th
+          class="text-white align-middle col-2 col-md-2 mx-auto text-center"
+        >ID de Orden</th>
+        <th
+          class="text-white align-middle col-md-7 mx-auto text-center"
+        >Productos</th>
+        <th
+          class="text-white align-middle col-md-2 mx-auto text-center"
+        >Timestamps</th>
+        <th
+          class="text-white align-middle col-md-1 mx-auto text-center"
+        >estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each ordenes}}
+        <tr>
+          <td
+            class="text-white align-middle col-md-2 mx-auto text-center"
+          >{{_id}}</td>
+          <td>
+            <ul class="list-unstyled">
+              {{#each productos}}
+                <li
+                  class="text-white align-middle col-md-6 mx-auto text-center"
+                  style="padding: 10px; margin-bottom: 10px;"
+                >{{nombre}} (x{{cantidadProdCarrito}})</li>
+              {{/each}}
+            </ul>
+          </td>
+          <td
+            class="text-white align-middle col-md-2 mx-auto text-center"
+          >{{createdAt}}</td>
+          <td
+            class="text-white align-middle col-md-1 mx-auto text-center"
+          >{{estado}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

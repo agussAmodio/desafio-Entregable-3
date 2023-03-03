@@ -1,24 +1,23 @@
-const { Router } = require("express");
+import { Router } from "express";
 const router = Router();
-const { isAuthenticated } = require("../helpers/auth");
+import helpers from "../helpers/auth.js";
 
-const {
-  getProducts,
-  getProductsCarrito,
-  addProductCarrito,
-  deleteProductCarrito,
-  renderCarritos,
-  addProductoCarritoPrueba,
-} = require("../controllers/carritos.controller");
+import carritosCtrl from "../controllers/carritos.controller.js";
 
-router.get("/get-products", getProducts);
+router.post(
+  "/carrito/producto/:id",
+  helpers.isAuthenticated,
+  carritosCtrl.addProductoCarrito
+);
 
-router.get("/products-cart", getProductsCarrito);
+router.get("/carritos", helpers.isAuthenticated, carritosCtrl.renderCarritos);
 
-router.post("/products-cart/:_id", isAuthenticated, addProductoCarritoPrueba);
+router.delete(
+  "/carritos/delete/:id",
+  helpers.isAuthenticated,
+  carritosCtrl.deleteProductCarrito
+);
 
-router.get("/carritos", isAuthenticated, renderCarritos);
+router.post("/finalizarCompra", carritosCtrl.botonFinalizar);
 
-router.delete("/carritos/delete/:id", isAuthenticated, deleteProductCarrito);
-
-module.exports = router;
+export default router;

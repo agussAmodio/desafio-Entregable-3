@@ -1,28 +1,34 @@
-const express = require("express");
-const exphbs = require("express-handlebars");
-const path = require("path");
-const passport = require("passport");
-const flash = require("connect-flash");
-const session = require("express-session");
-const methodOverride = require("method-override");
-const socketio = require("socket.io");
+import { Server as HTTPServer } from "http";
+import { Server as SocketServer } from "socket.io";
+import express from "express";
+import exphbs from "express-handlebars";
+import passport from "passport";
+import flash from "connect-flash";
+import session from "express-session";
+import methodOverride from "method-override";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+import { config } from "dotenv";
+
+import "./config/socket.js";
+import "./config/passport.js";
+import "./database.js";
 
 // INICIALIZACIONES
 const app = express();
-const PORT = process.env.PORT;
-require("./config/passport");
-require("dotenv").config();
-require("./database");
+const httpServer = new HTTPServer(app);
+const io = new SocketServer(httpServer);
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // CONFIGURACIONES
 app.set("port", process.env.PORT || 8080);
-app.set("views", path.join(__dirname, "views"));
+app.set("views", join(__dirname, "views"));
 app.engine(
   ".hbs",
   exphbs.engine({
     defaultLayout: "main",
-    layoutsDir: path.join(app.get("views"), "layouts"),
-    partialsDir: path.join(app.get("views"), "partials"),
+    layoutsDir: join(app.get("views"), "layouts"),
+    partialsDir: join(app.get("views"), "partials"),
     extname: ".hbs",
   })
 );
@@ -53,17 +59,24 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
-app.use(require("./routes/index.routes"));
-app.use(require("./routes/productos.routes"));
-app.use(require("./routes/users.routes"));
-app.use(require("./routes/carritos.routes"));
-app.use(require("./routes/chat.routes"));
+
+import indexRoutes from "./routes/index.routes.js";
+import productosRoutes from "./routes/productos.routes.js";
+import usersRoutes from "./routes/users.routes.js";
+import carritosRoutes from "./routes/carritos.routes.js";
+import chatRoutes from "./routes/chat.routes.js";
+import ordenesRoutes from "./routes/ordenes.routes.js";
+
+app.use(indexRoutes);
+app.use(productosRoutes);
+app.use(usersRoutes);
+app.use(carritosRoutes);
+app.use(chatRoutes);
+app.use(ordenesRoutes);
 
 // ARCHIVOS ESTATICOS
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(join(__dirname, "public")));
 
-app.listen(PORT || 8080, () => {
+httpServer.listen(process.env.PORT || 8080, () => {
   console.log(`server corriendo en el puerto ${app.get("port")} `);
 });
-
-//module.exports = app;

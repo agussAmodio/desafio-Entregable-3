@@ -1,5 +1,5 @@
 const productosCtrl = {};
-const Producto = require("../models/productos");
+import Producto from "../models/productos.js";
 
 productosCtrl.renderProductoForm = (req, res) => {
   res.render("productos/nuevoProducto");
@@ -48,4 +48,4 @@ productosCtrl.BuscarProductoPorId = async (req, res) => {
   }
 };
 
-module.exports = productosCtrl;
+export default productosCtrl;

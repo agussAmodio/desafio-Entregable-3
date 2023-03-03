@@ -1,0 +1,19 @@
+ <div class="row p-5 h-100" id="contentWrap">
+
+        <div class="col-md-8">
+            <div class="card bg-dark text-white rounded-0">
+                <div class="card-header text-white" style="background-color: #6441a5">
+                    <h4>Mensajes enviados:</h3>
+                </div>
+            {{#each mensajes}}
+                <b style="color: #6441a5"> {{email}}:</b> {{mensaje}} <br/>
+
+                
+                <div id="mensajess" class="card-body chat"></div>
+
+            {{/each}}
+                
+            </div>
+        </div>
+    </div>
+</div>

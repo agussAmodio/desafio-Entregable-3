@@ -1,23 +1,18 @@
-const { Router } = require("express");
+import { Router } from "express";
 const router = Router();
+import helpers from "../helpers/auth.js";
 
-const {
-  renderLoginForm,
-  renderRegistroForm,
-  registro,
-  login,
-  logout,
-} = require("../controllers/users.controller");
+import userCtrl from "../controllers/users.controller.js";
 
 // REGISTRO
-router.get("/users/registro", renderRegistroForm);
-router.post("/users/registro", registro);
+router.get("/users/registro", userCtrl.renderRegistroForm);
+router.post("/users/registro", userCtrl.registro);
 
 // LOGIN
-router.get("/", renderLoginForm);
-router.post("/users/login", login);
+router.get("/", userCtrl.renderLoginForm);
+router.post("/users/login", userCtrl.login);
 
 // LOGOUT
-router.get("/users/logout", logout);
+router.get("/users/logout", helpers.isAuthenticated, userCtrl.logout);
 
-module.exports = router;
+export default router;

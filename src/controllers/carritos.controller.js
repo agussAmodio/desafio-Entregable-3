@@ -1,100 +1,131 @@
+import nodemailer from "nodemailer";
+import Carrito from "../models/carritos.js";
+import Producto from "../models/productos.js";
+import Ordenes from "../models/ordenes.js";
+
 const carritosCtrl = {};
-const Carrito = require("../models/carritos");
-const producto = require("../models/productos");
-
-carritosCtrl.getProducts = async (req, res) => {
-  const products = await producto.find();
-  if (products) {
-    res.json({ products });
-  } else {
-    res.json({ mensaje: "No hay productos" });
-  }
-};
-
-carritosCtrl.getProductsCarrito = async (req, res) => {
-  const productsCart = await Carrito.find();
-
-  if (productsCart) {
-    res.json({ productsCart });
-  } else {
-    res.json({ mensaje: "No hay productos en el carrito" });
-  }
-
-  //Enviar el mensaje con los productos del carrito (twilio)
-};
 
 carritosCtrl.renderCarritos = async (req, res) => {
-  const carritos = await Carrito.find().lean();
+  const carrito = await Carrito.findOne().lean();
+  const productosDelCarrito = carrito ? carrito.productos : [];
 
-  /* const client = require("twilio")(process.envTWILIO_ID, process.env.TWILIO_SK);
-  client.messages
-    .create({
-      from: "whatsapp:+14155238886",
-      body: `${carritos}`,
-      to: `whatsapp: ${process.env.TWILIO_WSPP}`,
-    })
-    .then((message) => console.log(message.sid));*/
-  res.render("carritos/allCarritos", { carritos });
+  return res
+    .status(200)
+    .render("carritos/allCarritos", { productosDelCarrito });
 };
 
 carritosCtrl.deleteProductCarrito = async (req, res) => {
   const productoId = req.params.id;
+  const carrito = await Carrito.findOne();
+  const productosDelCarrito = carrito.productos;
 
-  const productoInCarrito = await Carrito.findById(productoId);
+  const indiceProducto = productosDelCarrito.findIndex(
+    (producto) => producto.id === productoId
+  );
 
-  const { nombre, foto, precio, _id } = await producto.findOne({
-    nombre: productoInCarrito.nombre,
+  if (indiceProducto === -1) {
+    return res
+      .status(404)
+      .json({ mensaje: "El producto no se encuentra en el carrito" });
+  }
+  productosDelCarrito.splice(indiceProducto, 1);
+
+  const resultado = await Carrito.updateOne(
+    {},
+    { productos: productosDelCarrito }
+  );
+
+  if (resultado.modifiedCount > 0) {
+    return res.status(200).redirect("http://localhost:8080/carritos");
+  }
+
+  return res.status(500).json({
+    mensaje: "Ocurrió un error al intentar eliminar el producto del carrito",
   });
-
-  await Carrito.findByIdAndDelete(productoId);
-
-  await producto
-    .findByIdAndUpdate(
-      _id,
-      { inCart: false, nombre, foto, precio },
-      { new: true }
-    )
-    .then((producto) => {
-      res.redirect("/carritos");
-    })
-    .catch((error) => res.json({ mensaje: "Hubo un error" }));
 };
 
-carritosCtrl.addProductoCarritoPrueba = async (req, res) => {
-  const { _id } = req.params;
+carritosCtrl.addProductoCarrito = async (req, res) => {
+  const { id } = req.params;
+  const carrito = await Carrito.findOne();
+  const productoParaAgregar = await Producto.findOne({ _id: id });
 
-  const productoEncontrado = await producto.findOne({ _id });
-
-  const noEstaVacio = _id !== "";
-
-  const estaEnElCarrito = await Carrito.findOne({ _id });
-
-  if (!productoEncontrado) {
-    res.status(400).json({
-      mensaje: "Este producto no se encuentra en nuestra base de datos",
+  if (!carrito) {
+    const nuevoProductoEnCarrito = new Carrito({
+      email: req.user.email,
+      productos: [productoParaAgregar],
+      direccion: req.user.direccion,
     });
-  } else if (noEstaVacio && !estaEnElCarrito) {
-    const newProductInCart = new Carrito({
-      nombre: productoEncontrado.nombre,
-      _id: productoEncontrado._id,
-      stock: productoEncontrado.stock,
-      foto: productoEncontrado.foto,
-      precio: productoEncontrado.precio,
-    });
-    newProductInCart.user = req.user.id;
+    await nuevoProductoEnCarrito.save();
+  } else {
+    const productosEnCarrito = carrito.productos;
 
-    await producto
-      .findByIdAndUpdate(productoEncontrado)
-      .then((product) => {
-        newProductInCart.save();
-        res.redirect("/productos");
-      })
-      .catch((error) => console.error(error));
-  } else if (estaEnElCarrito) {
-    res.status(400).json({
-      mensaje: "El producto ya esta en el carrito",
+    let productoYaExiste = false;
+    for (const producto of productosEnCarrito) {
+      if (producto._id.toString() === id) {
+        productoYaExiste = true;
+        producto.cantidadProdCarrito += 1;
+        break;
+      }
+    }
+
+    if (!productoYaExiste) {
+      productoParaAgregar.cantidadProdCarrito = 1;
+      productosEnCarrito.push(productoParaAgregar);
+    }
+
+    await Carrito.findByIdAndUpdate(carrito.id, {
+      productos: productosEnCarrito,
     });
   }
 };
 
-module.exports = carritosCtrl;
+carritosCtrl.botonFinalizar = async (req, res) => {
+  const carrito = await Carrito.findOne();
+  if (!carrito) {
+    res.status(404).redirect("http://localhost:8080/productos");
+  } else {
+    await Carrito.deleteOne({ _id: carrito._id });
+    const nuevaOrden = new Ordenes({
+      email: carrito.email,
+      productos: carrito.productos,
+      direccion: carrito.direccion,
+    });
+    await nuevaOrden.save();
+    const productosDelCarrito = [];
+    res.status(200).render("carritos/allCarritos", { productosDelCarrito });
+
+    //EMAIL CON LA ORDEN
+    /* const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      auth: {
+        user: process.env.USER_GMAIL,
+        pass: process.env.PASS_GMAIL,
+      },
+    });
+
+    //EMAIL
+    const mailOptions = {
+      from: "Remitente",
+      to: `${req.user.email}`,
+      subject: "Nueva orden",
+      text: `DATOS DE LA ORDEN:
+        EMAIL: ${carrito.email}
+  
+        PRODUCTOS: ${carrito.productos}
+        
+        DIRECCION: ${carrito.direccion}  
+     `,
+    };
+
+    await transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        res.status(500).send(error.message);
+      } else {
+        res.status(200).jsonp(req.body);
+      }
+    });*/
+  }
+};
+
+export default carritosCtrl;

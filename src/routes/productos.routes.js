@@ -1,28 +1,32 @@
-const { Router } = require("express");
+import { Router } from "express";
 const router = Router();
-
-const {
-  renderProductoForm,
-  createNewProducto,
-  renderProductos,
-  deleteProducto,
-  productosCategoria,
-  BuscarProductoPorId,
-} = require("../controllers/productos.controller");
+import helpers from "../helpers/auth.js";
+import productosCtrl from "../controllers/productos.controller.js";
 
 // AGREGAR PRODUCTOS A LA BASE DE DATOS
-
-router.get("/productos/add", renderProductoForm);
-router.post("/productos/nuevoProducto", createNewProducto);
+router.get(
+  "/productos/add",
+  helpers.isAuthenticated,
+  productosCtrl.renderProductoForm
+);
+router.post(
+  "/productos/nuevoProducto",
+  helpers.isAuthenticated,
+  productosCtrl.createNewProducto
+);
 
 // LISTAR TODOS LOS PRODUCTOS
-router.get("/productos", renderProductos);
+router.get("/productos", productosCtrl.renderProductos);
 
 // BORRAR PRODUCTO POR SU ID
-router.delete("/productos/delete/:id", deleteProducto);
+router.delete(
+  "/productos/delete/:id",
+  helpers.isAuthenticated,
+  productosCtrl.deleteProducto
+);
 
 // PRODUCTOS POR CATEGORIA O POR ID
-router.get("/productos/:id", BuscarProductoPorId);
-router.get("/productos/categoria/:categoria", productosCategoria);
+router.get("/productos/:id", productosCtrl.BuscarProductoPorId);
+router.get("/productos/categoria/:categoria", productosCtrl.productosCategoria);
 
-module.exports = router;
+export default router;

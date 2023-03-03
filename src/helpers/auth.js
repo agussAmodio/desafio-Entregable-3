@@ -7,4 +7,4 @@ helpers.isAuthenticated = (req, res, next) => {
   res.redirect("/");
 };
 
-module.exports = helpers;
+export default helpers;

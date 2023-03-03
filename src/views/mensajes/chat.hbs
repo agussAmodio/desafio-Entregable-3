@@ -1,3 +1,54 @@
-<h1>HOLA ACA VA EL CHAT!!</h1>
+<link rel="stylesheet" href="/main.css">
+<div class="container p-5 h-100">
 
+    <div class="row h-100" id="emailWrap">
+        <div class="col-md-4 mx-auto my-auto">
+
+            <div class="card rounded-0 bg-dark text-white">
+                <div class="card-body p-4">
+                    <form id="emailForm">
+                        <div class="mb-3">
+                            <label for="email">Email:</label>
+                            <input id="email" type="text"
+                                class="form-control bg-dark text-white shadown-0 border-primary"
+                                placeholder="myEmail" autofocus />
+                        </div>
+                        <input type="submit" class="btn btn-warning btn-block mt-2" />
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="row p-5 h-100" id="contentWrap">
+
+        <div class="col-md-8">
+            <div class="card bg-dark text-white rounded-0">
+                
+                <div class="card-header text-white" style="background-color: #6441a5">
+                    <h4>Chat</h3>
+                </div>
+
+                
+                <div id="chat" class="card-body chat"></div>
+
+                
+                <form id="message-form" class="card-footer">
+                    <div class="input-group ">
+                        <input type="text" id="message" class="form-control" />
+                        <button class="btn btn-warning rounded-0">
+                            <i class="fas fa-location-arrow"></i> Enviar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
 <script src="/chat.js"></script>
+<script src="/socket.io/socket.io.js"></script>

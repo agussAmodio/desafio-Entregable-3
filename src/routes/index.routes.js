@@ -1,15 +1,13 @@
-const { Router } = require("express");
+import { Router } from "express";
 const router = Router();
-const {
-  renderCuenta,
-  renderCarrito,
-  renderLogout,
-} = require("../controllers/index.controller");
+import helpers from "../helpers/auth.js";
 
-router.get("/cuenta", renderCuenta);
+import indexCtrl from "../controllers/index.controller.js";
 
-router.get("/carrito", renderCarrito);
+router.get("/cuenta", indexCtrl.renderCuenta);
 
-router.get("/logout", renderLogout);
+router.get("/carrito", indexCtrl.renderCarrito);
 
-module.exports = router;
+router.get("/logout", helpers.isAuthenticated, indexCtrl.renderLogout);
+
+export default router;
