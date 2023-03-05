@@ -9,6 +9,7 @@ router.get(
   helpers.isAuthenticated,
   productosCtrl.renderProductoForm
 );
+
 router.post(
   "/productos/nuevoProducto",
   helpers.isAuthenticated,

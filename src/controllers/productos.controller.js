@@ -26,7 +26,7 @@ productosCtrl.renderProductos = async (req, res) => {
 };
 
 productosCtrl.deleteProducto = async (req, res) => {
-  await Producto.findByIdAndDelete(req.params.id);
+  const productoEliminado = await Producto.findByIdAndDelete(req.params.id);
   res.redirect("/productos");
 };
 

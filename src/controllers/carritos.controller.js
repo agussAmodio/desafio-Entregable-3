@@ -6,7 +6,7 @@ import Ordenes from "../models/ordenes.js";
 const carritosCtrl = {};
 
 carritosCtrl.renderCarritos = async (req, res) => {
-  const carrito = await Carrito.findOne().lean();
+  const carrito = await Carrito.findOne({ user: req.user.id }).lean();
   const productosDelCarrito = carrito ? carrito.productos : [];
 
   return res
@@ -46,7 +46,7 @@ carritosCtrl.deleteProductCarrito = async (req, res) => {
 
 carritosCtrl.addProductoCarrito = async (req, res) => {
   const { id } = req.params;
-  const carrito = await Carrito.findOne();
+  const carrito = await Carrito.findOne({ user: req.user.id });
   const productoParaAgregar = await Producto.findOne({ _id: id });
 
   if (!carrito) {
@@ -55,6 +55,7 @@ carritosCtrl.addProductoCarrito = async (req, res) => {
       productos: [productoParaAgregar],
       direccion: req.user.direccion,
     });
+    nuevoProductoEnCarrito.user = req.user.id;
     await nuevoProductoEnCarrito.save();
   } else {
     const productosEnCarrito = carrito.productos;
@@ -90,6 +91,7 @@ carritosCtrl.botonFinalizar = async (req, res) => {
       productos: carrito.productos,
       direccion: carrito.direccion,
     });
+    nuevaOrden.user = req.user.id;
     await nuevaOrden.save();
     const productosDelCarrito = [];
     res.status(200).render("carritos/allCarritos", { productosDelCarrito });

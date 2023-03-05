@@ -16,6 +16,10 @@ const ordenesSchema = new Schema(
     ],
     direccion: { type: String, required: true },
     estado: { type: String, default: "generada" },
+    user: {
+      type: String,
+      required: true,
+    },
   },
 
   {

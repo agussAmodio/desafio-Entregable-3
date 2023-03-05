@@ -5,14 +5,17 @@ import helpers from "../helpers/auth.js";
 import userCtrl from "../controllers/users.controller.js";
 
 // REGISTRO
-router.get("/users/registro", userCtrl.renderRegistroForm);
-router.post("/users/registro", userCtrl.registro);
+router.get("/usuario/registro", userCtrl.renderRegistroForm);
+router.post("/usuario/registro", userCtrl.registro);
 
 // LOGIN
 router.get("/", userCtrl.renderLoginForm);
-router.post("/users/login", userCtrl.login);
+router.post("/usuario/login", userCtrl.login);
 
 // LOGOUT
-router.get("/users/logout", helpers.isAuthenticated, userCtrl.logout);
+router.get("/usuario/logout", helpers.isAuthenticated, userCtrl.logout);
+
+// CUENTA
+router.get("/cuenta", helpers.isAuthenticated, userCtrl.renderCuenta);
 
 export default router;

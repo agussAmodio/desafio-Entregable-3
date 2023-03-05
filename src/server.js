@@ -9,6 +9,7 @@ import methodOverride from "method-override";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { config } from "dotenv";
+config();
 
 import "./config/socket.js";
 import "./config/passport.js";
@@ -22,6 +23,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // CONFIGURACIONES
 app.set("port", process.env.PORT || 8080);
+app.set("sessionExp", process.env.SESSION_EXP || 60);
 app.set("views", join(__dirname, "views"));
 app.engine(
   ".hbs",
@@ -38,8 +40,9 @@ app.set("view engine", ".hbs");
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
+    cookie: { maxAge: Number(process.env.SESSION_EXP) * 60000 },
     secret: "secret",
-    resave: true,
+    resave: false,
     saveUninitialized: true,
   })
 );
@@ -60,14 +63,12 @@ app.use((req, res, next) => {
 
 // ROUTES
 
-import indexRoutes from "./routes/index.routes.js";
 import productosRoutes from "./routes/productos.routes.js";
 import usersRoutes from "./routes/users.routes.js";
 import carritosRoutes from "./routes/carritos.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import ordenesRoutes from "./routes/ordenes.routes.js";
 
-app.use(indexRoutes);
 app.use(productosRoutes);
 app.use(usersRoutes);
 app.use(carritosRoutes);
@@ -78,5 +79,5 @@ app.use(ordenesRoutes);
 app.use(express.static(join(__dirname, "public")));
 
 httpServer.listen(process.env.PORT || 8080, () => {
-  console.log(`server corriendo en el puerto ${app.get("port")} `);
+  console.log(`server corriendo en el puerto ${app.get("port")}`);
 });

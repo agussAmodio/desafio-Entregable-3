@@ -2,7 +2,7 @@ const ordenesCtrl = {};
 import Ordenes from "../models/ordenes.js";
 
 ordenesCtrl.renderOrdenes = async (req, res) => {
-  const ordenes = await Ordenes.find().lean();
+  const ordenes = await Ordenes.find({ user: req.user.id }).lean();
   return res.status(200).render("ordenes/allOrdenes", { ordenes });
 };
 

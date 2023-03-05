@@ -15,7 +15,10 @@ const carritoSchema = new Schema(
       },
     ],
     direccion: { type: String, required: true },
-    //inCart: { type: Boolean, required: false },
+    user: {
+      type: String,
+      required: true,
+    },
   },
 
   {

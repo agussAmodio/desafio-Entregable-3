@@ -3,6 +3,13 @@ import User from "../models/usuarios.js";
 
 const usersCtrl = {};
 
+usersCtrl.renderCuenta = async (req, res) => {
+  const useruarioActivo = req.user;
+  const usuarioID = useruarioActivo._id;
+  const usuarioEncontrado = await User.find({ _id: usuarioID }).lean();
+  res.render("cuenta", { usuarioEncontrado });
+};
+
 usersCtrl.renderRegistroForm = (req, res) => {
   res.render("usuarios/registro");
 };
