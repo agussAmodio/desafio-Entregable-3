@@ -34,7 +34,7 @@ usersCtrl.registro = async (req, res) => {
 
   if (emailsUser) {
     req.flash("error_msg", "El email ya esta en uso!");
-    return res.redirect("/users/registro");
+    return res.redirect("/usuario/registro");
   }
 
   const newUser = new User({
@@ -47,7 +47,13 @@ usersCtrl.registro = async (req, res) => {
   });
 
   newUser.password = await newUser.encryptPassword(password);
-  await newUser.save();
+
+  try {
+    await newUser.save();
+  } catch (e) {
+    req.flash("error_msg", "Uno de los campos no fue llenado correctamente!");
+    return res.redirect("/usuario/registro");
+  }
 
   req.flash("success_msg", "Usuario registrado!");
   res.redirect("/");

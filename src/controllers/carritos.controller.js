@@ -79,7 +79,7 @@ carritosCtrl.addProductoCarrito = async (req, res) => {
 
 carritosCtrl.botonFinalizar = async (req, res) => {
   const carrito = await Carrito.findOne();
-  if (!carrito) {
+  if (!carrito || carrito.productos.length == 0) {
     res.status(404).redirect("http://localhost:8080/productos");
   } else {
     await Carrito.deleteOne({ _id: carrito._id });
