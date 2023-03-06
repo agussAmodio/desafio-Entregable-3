@@ -21,7 +21,7 @@ router.get("/productos", productosCtrl.renderProductos);
 
 // BORRAR PRODUCTO POR SU ID
 router.delete(
-  "/productos/delete/:id",
+  "/productos/:id",
   helpers.isAuthenticated,
   productosCtrl.deleteProducto
 );

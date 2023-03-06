@@ -7,7 +7,7 @@ import ordenesCtrl from "../controllers/ordenes.controller.js";
 router.get("/ordenes", helpers.isAuthenticated, ordenesCtrl.renderOrdenes);
 
 router.delete(
-  "/ordenes/delete/:id",
+  "/ordenes/:id",
   helpers.isAuthenticated,
   ordenesCtrl.borrarOrdenes
 );

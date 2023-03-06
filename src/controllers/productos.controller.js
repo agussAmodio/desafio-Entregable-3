@@ -26,8 +26,12 @@ productosCtrl.renderProductos = async (req, res) => {
 };
 
 productosCtrl.deleteProducto = async (req, res) => {
-  const productoEliminado = await Producto.findByIdAndDelete(req.params.id);
-  res.redirect("/productos");
+  try {
+    const productoEliminado = await Producto.findByIdAndDelete(req.params.id);
+    res.status(200).redirect("/productos");
+  } catch (e) {
+    res.status(404).redirect("/productos/errorProductoNoEncontrado");
+  }
 };
 
 productosCtrl.productosCategoria = async (req, res) => {
@@ -42,7 +46,9 @@ productosCtrl.BuscarProductoPorId = async (req, res) => {
   try {
     const idDelProductoABuscar = req.params.id;
     const productoEncontrado = await Producto.findById(idDelProductoABuscar);
-    res.render("productos/productoEncontrado", { productoEncontrado });
+    res
+      .status(200)
+      .render("productos/productoEncontrado", { productoEncontrado });
   } catch (error) {
     res.status(404).render("productos/errorProductoNoEncontrado");
   }

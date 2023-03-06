@@ -13,7 +13,7 @@ router.post(
 router.get("/carritos", helpers.isAuthenticated, carritosCtrl.renderCarritos);
 
 router.delete(
-  "/carritos/delete/:id",
+  "/carritos/producto/:id",
   helpers.isAuthenticated,
   carritosCtrl.deleteProductCarrito
 );

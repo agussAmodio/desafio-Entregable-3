@@ -1,8 +1,4 @@
-
 # Ecommerce Backend
-
-
-
 
 ## Instalacion
 
@@ -10,16 +6,15 @@ Se necesita tener descargado NodeJS.
 Para descargar las dependencias necesarias con npm escibir esto en la consola
 
 ```bash
-  npm install 
+  npm install
 ```
 
 En el caso de usar Yarn escribir esto en la consola
 
 ```bash
-  yarn install 
+  yarn install
 ```
 
-   
 ## Ejecutar
 
 Para correr la app usar
@@ -27,7 +22,6 @@ Para correr la app usar
 ```bash
   npm run start
 ```
-
 
 ## Dependencias
 
@@ -43,11 +37,12 @@ Para correr la app usar
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "socket.io": "^4.6.1"
-## Variables de entorno 
+
+## Variables de entorno
 
 Para ejecutar el proyecto, deberá agregar las siguientes variables de entorno a su archivo .env
 
-`MONGODB_URI = ""` 
+`MONGODB_URI = ""`
 
 `USER_GMAIL = ""`
 
@@ -62,28 +57,28 @@ Para ejecutar el proyecto, deberá agregar las siguientes variables de entorno a
 ### Usuarios
 
 ```http
-  GET /usuario/registro  --> Renderiza la vista del registro de usuarios. 
+  GET /usuario/registro  --> Renderiza la vista del registro de usuarios.
 ```
 
 ```http
   POST /usuario/registro  --> Guarda lo instroducido en el registro de usuarios.
-``` 
+```
 
 ```http
   GET /  --> Renderiza la vista del login de usuarios.
-``` 
+```
 
 ```http
   POST /usuario/login --> Guarda lo instroducido en el login de usuarios.
-``` 
+```
 
 ```http
   GET /usuario/logout --> Cierra la sesion del usuario.
-``` 
+```
 
 ```http
   GET /cuenta --> Renderiza la vista de los datos de la cuenta.
-``` 
+```
 
 ### Productos
 
@@ -100,7 +95,7 @@ Para ejecutar el proyecto, deberá agregar las siguientes variables de entorno a
 ```
 
 ```http
-  DELETE /productos/delete/:id  --> Elimina un producto por id pasado por parametro.
+  DELETE /productos/:id  --> Elimina un producto por id pasado por parametro.
 ```
 
 ```http
@@ -122,7 +117,7 @@ Para ejecutar el proyecto, deberá agregar las siguientes variables de entorno a
 ```
 
 ```http
-  DELETE /carritos/delete/:id  --> Elimina un producto por id que este en el carrito.
+  DELETE /carritos/producto/:id  --> Elimina un producto por id que este en el carrito.
 ```
 
 ```http
@@ -136,7 +131,7 @@ Para ejecutar el proyecto, deberá agregar las siguientes variables de entorno a
 ```
 
 ```http
-  DELETE /ordenes/delete/:id  --> Elimina la orden con el id pasado por parametro.
+  DELETE /ordenes/:id  --> Elimina la orden con el id pasado por parametro.
 ```
 
 ### Chat
@@ -148,10 +143,3 @@ Para ejecutar el proyecto, deberá agregar las siguientes variables de entorno a
 ```http
   GET /chat/:email  --> Busca los mensajes enviados por el email pasado por parametro.
 ```
-
-
-
-
-
-
-

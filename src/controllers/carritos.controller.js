@@ -24,59 +24,56 @@ carritosCtrl.deleteProductCarrito = async (req, res) => {
   );
 
   if (indiceProducto === -1) {
-    return res
-      .status(404)
-      .json({ mensaje: "El producto no se encuentra en el carrito" });
+    res.status(404).redirect("/productos/errorProductoNoEncontrado");
+  } else {
+    productosDelCarrito.splice(indiceProducto, 1);
+
+    const resultado = await Carrito.updateOne(
+      {},
+      { productos: productosDelCarrito }
+    );
+    res.status(200).redirect("http://localhost:8080/carritos");
   }
-  productosDelCarrito.splice(indiceProducto, 1);
-
-  const resultado = await Carrito.updateOne(
-    {},
-    { productos: productosDelCarrito }
-  );
-
-  if (resultado.modifiedCount > 0) {
-    return res.status(200).redirect("http://localhost:8080/carritos");
-  }
-
-  return res.status(500).json({
-    mensaje: "Ocurrió un error al intentar eliminar el producto del carrito",
-  });
 };
 
 carritosCtrl.addProductoCarrito = async (req, res) => {
-  const { id } = req.params;
-  const carrito = await Carrito.findOne({ user: req.user.id });
-  const productoParaAgregar = await Producto.findOne({ _id: id });
+  try {
+    const { id } = req.params;
+    const carrito = await Carrito.findOne({ user: req.user.id });
+    const productoParaAgregar = await Producto.findOne({ _id: id });
 
-  if (!carrito) {
-    const nuevoProductoEnCarrito = new Carrito({
-      email: req.user.email,
-      productos: [productoParaAgregar],
-      direccion: req.user.direccion,
-    });
-    nuevoProductoEnCarrito.user = req.user.id;
-    await nuevoProductoEnCarrito.save();
-  } else {
-    const productosEnCarrito = carrito.productos;
+    if (!carrito) {
+      const nuevoProductoEnCarrito = new Carrito({
+        email: req.user.email,
+        productos: [productoParaAgregar],
+        direccion: req.user.direccion,
+      });
+      nuevoProductoEnCarrito.user = req.user.id;
+      await nuevoProductoEnCarrito.save();
+    } else {
+      const productosEnCarrito = carrito.productos;
 
-    let productoYaExiste = false;
-    for (const producto of productosEnCarrito) {
-      if (producto._id.toString() === id) {
-        productoYaExiste = true;
-        producto.cantidadProdCarrito += 1;
-        break;
+      let productoYaExiste = false;
+      for (const producto of productosEnCarrito) {
+        if (producto._id.toString() === id) {
+          productoYaExiste = true;
+          producto.cantidadProdCarrito += 1;
+          break;
+        }
       }
-    }
 
-    if (!productoYaExiste) {
-      productoParaAgregar.cantidadProdCarrito = 1;
-      productosEnCarrito.push(productoParaAgregar);
-    }
+      if (!productoYaExiste) {
+        productoParaAgregar.cantidadProdCarrito = 1;
+        productosEnCarrito.push(productoParaAgregar);
+      }
 
-    await Carrito.findByIdAndUpdate(carrito.id, {
-      productos: productosEnCarrito,
-    });
+      await Carrito.findByIdAndUpdate(carrito.id, {
+        productos: productosEnCarrito,
+      });
+    }
+    res.status(200).redirect("/productos");
+  } catch (error) {
+    res.status(404).redirect("/productos/errorProductoNoEncontrado");
   }
 };
 
